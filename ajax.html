@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajax Demo</title>
+</head>
+
+<body>
+
+    <button id="btn1"> Get User </button>
+    <button id="btn2"> Get Users </button>
+
+    <h1>User: </h1>
+    <div id="user"></div>
+    <h1>Users: </h1>
+    <div id="users"></div>
+
+
+    <script>
+        document.getElementById("btn1").addEventListener("click", loadUser);
+        document.getElementById("btn2").addEventListener("click", loadUsers);
+
+
+        function loadUser() {
+
+            var xhr = new XMLHttpRequest();
+
+            xhr.open('GET', 'user.json', true);
+
+            xhr.onload = function () {
+                if (xhr.status == 200) {
+                    var user = JSON.parse(this.responseText);
+                    document.getElementById("user").innerHTML = '<ul> <li> Name : ' + user.name + '</li>' + 
+                                                                      '<li> Email : ' + user.email + '</li></ul>';
+                }
+            }
+            xhr.send();
+        }
+
+        function loadUsers(){
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET','users.json',true);
+            xhr.onload = function () {
+                if(xhr.status == 200){
+                    var users = JSON.parse(this.responseText);
+                    for(var i in users){
+                        document.getElementById("users").innerHTML +='<ul>' +' <li>Name : ' + users[i].name + '</li>' +
+                                                                        '<li>Email : ' + users[i].email + '</li>' +
+                                                                    '</ul>';
+                    }   
+                }else{
+                    document.getElementById("users").innerHTML ="Request Error!";
+                }
+            }
+            xhr.send();
+        }
+    
+    </script>
+
+</body>
+
+</html>
