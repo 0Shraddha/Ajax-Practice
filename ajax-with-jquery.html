@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,19 +12,88 @@
             display: grid;
             grid-template-columns: repeat(8, 1fr);
         }
+
+        .blog{
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+        }
+        .blog-card{
+            padding: 10px;
+            margin: 10px;
+            border: 1px solid peru;
+            border-radius: 10px;
+        }
+
+        .card {
+            background-color: rgba(22, 144, 214, 0.877);
+            margin: 10px;
+        }
+
+        img {
+            height: 100px;
+            width: 100px;
+        }
     </style>
 </head>
-<body>
-    <h1>Ajax with EXTERNAL API</h1>
 
-    <button id="btn">Load Github Users</button>
+<body>
+    <h1>Ajax with Jquery</h1>
+
+    <button id="btn">Load dummy text from text.txt</button>
+    <div class="users"></div>
+    <h2>List of users: <button id="show">Show github user</button></h2>
     <div id="users"></div>
 
+    <h2>Blog</h2>
+    <div class="blog"></div>
+
     <script>
-        
+        $(document).ready(function () {
+            $("#btn").on("click", () => {
+                $(".users").load('text.txt');
+            })
+
+            // $.get("text.txt",function(data){
+            //     $("#show").on("click",()=>{
+            //         $("#users").html(data);
+
+            //     })
+            // })
+
+            $.getJSON("https://api.github.com/users", function (data) {
+                $("#show").on("click", () => {
+                        $.each(data, function (i, user) {
+                            $("#users").append('<div class="card"> <h2>' + user.login + '</h2>' +
+                                '<img src="' + user.avatar_url + '" alt="user-image" /></div>'
+                            );
+                    })
+                })
+            })
+
+            // $.getJSON("https://jsonplaceholder.typicode.com/posts",function(data){
+            //     $.each(data,function(i, post){
+            //         $(".blog").append('<div class="blog-card"><h2>'+ post.title +'</h2> <p>' +  post.body + '</p></div>');
+
+            //     })
+            // })
+
+            $.ajax({
+                method : 'GET',
+                url : 'https://jsonplaceholder.typicode.com/posts',
+                dataType : 'json'
+            }).done(function(data){
+                console.log(data);
+                $.each(data, function(i, post){
+                   $(".blog").append('<div class="blog-card"><h2>'+ post.title +'</h2> <p>' +  post.body + '</p></div>');
+                })
+            })
+        })
+
+
 
     </script>
 
 
 </body>
+
 </html>
